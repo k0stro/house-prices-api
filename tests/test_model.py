@@ -1,6 +1,6 @@
 import pytest
 import joblib
-from app.model import load_model, MODEL_PATH
+from app.model import load_model, MODEL_PATH, predict
 
 def test_load_model():
     model = load_model()
@@ -10,3 +10,8 @@ def test_load_model():
 def test_model_path():
     assert MODEL_PATH.exists()
     assert MODEL_PATH.suffix == '.pkl'
+
+def test_predict_returns_float():
+    dummy_features = [1.0 for _ in range(87)]
+    result = predict(dummy_features)
+    assert isinstance(result, float)
