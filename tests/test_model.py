@@ -1,6 +1,6 @@
 import pytest
 import joblib
-from app.model import load_model, MODEL_PATH, predict
+from app.model import load_model, MODEL_PATH
 
 def test_load_model():
     model = load_model()
