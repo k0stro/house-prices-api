@@ -12,6 +12,6 @@ def test_model_path():
     assert MODEL_PATH.suffix == '.pkl'
 
 def test_predict_returns_float():
-    dummy_features = [1.0 for _ in range(87)]
+    dummy_features = [1.0 for _ in range(86)]
     result = predict(dummy_features)
     assert isinstance(result, float)
