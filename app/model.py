@@ -2,7 +2,7 @@ import joblib
 from pathlib import Path
 from pydantic import BaseModel, Field
 
-class HousePriceData(BaseModel):
+class HousePriceInputData(BaseModel):
     """Data model for house price prediction input."""
     LotFrontage: float
     LotArea: int
@@ -90,6 +90,10 @@ class HousePriceData(BaseModel):
     UnfBsmtPercent: float
     LivLotRatio: float
     AreaPerRoom: float
+
+class HousePriceOutputData(BaseModel):
+    """Data model for house price prediction output."""
+    SalePrice: float
 
 
 MODEL_PATH = Path('models/house_prices_model.pkl')
