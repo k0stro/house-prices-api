@@ -11,4 +11,6 @@ def health():
 
 @app.post("/predict", response_model=HousePriceOutputData)
 def predict_price(input_data: HousePriceInputData):
-    pass
+    features = list(input_data.model_dump().values())
+    prediction = predict(features)
+    return HousePriceOutputData(SalePrice=prediction)
