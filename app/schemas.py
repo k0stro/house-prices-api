@@ -94,7 +94,7 @@ class HousePriceOutputData(BaseModel):
     SalePrice: float
 
 
-processed_dummy_input = {
+dummy_input = {
                 "LotFrontage": 65.0, 
                 "LotArea": 8450, 
                 "OverallQual": 7, 

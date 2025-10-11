@@ -1,9 +1,9 @@
 import pytest
 from pydantic import ValidationError
-from app.schemas import ProcessedHousePriceInputData, HousePriceOutputData, processed_dummy_input
+from app.schemas import ProcessedHousePriceInputData, HousePriceOutputData, dummy_input
 
 def test_processed_input_schema_valid():
-        data = ProcessedHousePriceInputData(**processed_dummy_input)
+        data = ProcessedHousePriceInputData(**dummy_input)
         assert isinstance(data, ProcessedHousePriceInputData)
         assert data.LotArea == 8450
 
@@ -20,7 +20,7 @@ def test_missing_field_raises_error():
         ProcessedHousePriceInputData(**missing_input)
 
 def test_alias_fields_work():
-     data = ProcessedHousePriceInputData(**processed_dummy_input)
+     data = ProcessedHousePriceInputData(**dummy_input)
      assert data.FirstFlrSF == processed_dummy_input["1stFlrSF"]
      assert data.SecondFlrSF == processed_dummy_input["2ndFlrSF"]
      assert data.ThreeSsnPorch == processed_dummy_input["3SsnPorch"]
