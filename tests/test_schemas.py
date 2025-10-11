@@ -1,0 +1,38 @@
+import pytest
+from pydantic import ValidationError
+from app.schemas import ProcessedHousePriceInputData, HousePriceOutputData, processed_dummy_input
+
+def test_processed_input_schema_valid():
+        data = ProcessedHousePriceInputData(**processed_dummy_input)
+        assert isinstance(data, ProcessedHousePriceInputData)
+        assert data.LotArea == 8450
+
+def test_processed_input_schema_invalid():
+    invalid_input = processed_dummy_input.copy()
+    invalid_input["LotArea"] = "string_instead_of_int"
+    with pytest.raises(ValidationError):
+        ProcessedHousePriceInputData(**invalid_input)
+
+def test_missing_field_raises_error():
+    missing_input = processed_dummy_input.copy()
+    missing_input.pop("LotArea")
+    with pytest.raises(ValidationError):
+        ProcessedHousePriceInputData(**missing_input)
+
+def test_alias_fields_work():
+     data = ProcessedHousePriceInputData(**processed_dummy_input)
+     assert data.FirstFlrSF == processed_dummy_input["1stFlrSF"]
+     assert data.SecondFlrSF == processed_dummy_input["2ndFlrSF"]
+     assert data.ThreeSsnPorch == processed_dummy_input["3SsnPorch"]
+
+def test_output_model_valid():
+     out = HousePriceOutputData(SalePrice=250000.0)
+     assert out.SalePrice == 250000.0  
+
+def test_output_model_invalid():
+        with pytest.raises(ValidationError):
+            HousePriceOutputData(SalePrice="not_a_float")
+
+
+
+
