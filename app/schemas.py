@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-class HousePriceInputData(BaseModel):
+class ProcessedHousePriceInputData(BaseModel):
     """Data model for house price prediction input."""
     LotFrontage: float
     LotArea: int
@@ -94,7 +94,7 @@ class HousePriceOutputData(BaseModel):
     SalePrice: float
 
 
-dummy_input = {
+processed_dummy_input = {
                 "LotFrontage": 65.0, 
                 "LotArea": 8450, 
                 "OverallQual": 7, 
