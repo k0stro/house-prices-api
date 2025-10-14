@@ -24,4 +24,3 @@ def predict(features: list[float]) -> float:
     X = np.array(features).reshape(1, -1)  # 1 sample, n_features
     y_pred = model.predict(X)
     return float(y_pred[0])
-
