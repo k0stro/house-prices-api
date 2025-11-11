@@ -1,8 +1,7 @@
 import pytest
 import joblib
-from app.model import   (load_model, MODEL_PATH, predict, 
-                         load_encoding_map, ENCODING_MAP_PATH, 
-                         load_scaler, SCALER_PATH)
+from config.main_config import MODEL_PATH, ENCODING_MAP_PATH, SCALER_PATH
+from app.model import   load_model, predict, load_encoding_map, load_scaler
 
 def test_load_model():
     model = load_model()
