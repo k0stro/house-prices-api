@@ -1,6 +1,8 @@
 import pytest
 import joblib
-from app.model import load_model, MODEL_PATH, predict
+from app.model import   (load_model, MODEL_PATH, predict, 
+                         load_encoding_map, ENCODING_MAP_PATH, 
+                         load_scaler, SCALER_PATH)
 
 def test_load_model():
     model = load_model()
@@ -15,3 +17,21 @@ def test_predict_returns_float():
     dummy_features = [1.0 for _ in range(86)]
     result = predict(dummy_features)
     assert isinstance(result, float)
+
+def test_load_encoding_map():
+    encoding_map = load_encoding_map()
+    assert encoding_map is not None
+    assert isinstance(encoding_map, dict)
+
+def test_encoding_map_path():
+    assert ENCODING_MAP_PATH.exists()
+    assert ENCODING_MAP_PATH.suffix == '.pkl'
+
+def test_load_scaler():
+    scaler = load_scaler()
+    assert scaler is not None
+    assert hasattr(scaler, 'transform')
+
+def test_scaler_path():
+    assert SCALER_PATH.exists()
+    assert SCALER_PATH.suffix == '.pkl'

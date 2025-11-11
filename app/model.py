@@ -10,6 +10,18 @@ MODEL_PATH = Path(hf_hub_download(
     repo_type="model"
 ))
 
+ENCODING_MAP_PATH = Path(hf_hub_download(
+    repo_id="k0stro/house-prices-model",
+    filename="categorical_encoding_map.pkl",
+    repo_type="model"
+))
+
+SCALER_PATH = Path(hf_hub_download(
+    repo_id="k0stro/house-prices-model",
+    filename="column_transformer_scaler.pkl",
+    repo_type="model"
+))
+
 def load_model():
     """Load the pre-trained model from Hugging Face."""
     if not MODEL_PATH.exists():
@@ -24,3 +36,9 @@ def predict(features: list[float]) -> float:
     X = np.array(features).reshape(1, -1)  # 1 sample, n_features
     y_pred = model.predict(X)
     return float(y_pred[0])
+
+def load_encoding_map():
+    pass
+
+def load_scaler():
+    pass
