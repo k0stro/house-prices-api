@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from app.preprocessing import feature_construction
+from app.preprocessing import feature_construction, apply_ordinal_encoding
 
 def test_feature_construction():
     data = {
@@ -38,3 +38,24 @@ def test_feature_construction():
     assert result.loc[1, "UnfBsmtPercent"] == 0
     assert np.isclose(result.loc[0, "LivLotRatio"], 1500 / 9000)
     assert np.isclose(result.loc[0, "AreaPerRoom"], (1000 + 500) / 6)
+
+
+def test_apply_ordinal_target_encoding():
+    data = {
+        "Neighborhood": ["A", "B", "A", "C"],
+        "HouseStyle": ["1Story", "2Story", "1Story", "1Story"],
+    }
+    df = pd.DataFrame(data)
+
+    encoding_map = {
+        "Neighborhood": {"A": 1, "B": 2, "C": 3},
+        "HouseStyle": {"1Story": 1, "2Story": 2},
+    }
+
+    result = apply_ordinal_encoding(df.copy(), encoding_map)
+
+    assert result.loc[0, "Neighborhood_encoded"] == 1
+    assert result.loc[1, "Neighborhood_encoded"] == 2
+    assert result.loc[3, "Neighborhood_encoded"] == 3
+    assert result.loc[0, "HouseStyle_encoded"] == 1
+    assert result.loc[1, "HouseStyle_encoded"] == 2
