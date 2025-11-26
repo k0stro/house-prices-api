@@ -207,3 +207,56 @@ def test_cast_categorical_changes_dtype(sample_df):
 
     for col in categorical_cols:
         assert result[col].dtype == 'object'
+
+def test_cast_categorical_no_side_effects(sample_df):
+    categorical_cols = [
+        'MSZoning',
+        'Street',
+        'Alley',
+        'LotShape',
+        'LandContour',
+        'Utilities',
+        'LotConfig',
+        'LandSlope',
+        'Neighborhood',
+        'Condition1',
+        'Condition2',
+        'BldgType',
+        'HouseStyle',
+        'RoofStyle',
+        'RoofMatl',
+        'Exterior1st',
+        'Exterior2nd',
+        'MasVnrType',
+        'ExterQual',
+        'ExterCond',
+        'Foundation',
+        'BsmtQual',
+        'BsmtCond',
+        'BsmtExposure',
+        'BsmtFinType1',
+        'BsmtFinType2',
+        'Heating',
+        'HeatingQC',
+        'CentralAir',
+        'Electrical',
+        'KitchenQual',
+        'Functional',
+        'FireplaceQu',
+        'GarageType',
+        'GarageFinish',
+        'GarageQual',
+        'GarageCond',
+        'PavedDrive',
+        'PoolQC',
+        'Fence',
+        'MiscFeature',
+        'SaleType',
+        'SaleCondition',
+        'MSSubClass'
+        ]
+    original_df = sample_df.copy()
+    result = cast_categorical(sample_df, categorical_cols)
+
+    assert sample_df is not result
+    assert sample_df.equals(original_df)
