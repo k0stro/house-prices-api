@@ -18,7 +18,7 @@ def apply_ordinal_encoding(df: pd.DataFrame, encoding_map: dict) -> pd.DataFrame
     df: pandas DataFrame
     encoding_map: dict, saved encoding maps {column_name: {category: encoded_value}}
     Returns:
-    df_encoded: DataFrame with encoded columns
+    df: DataFrame with encoded columns
     """
     df = df.copy()
     for col, col_map in encoding_map.items():
@@ -26,5 +26,28 @@ def apply_ordinal_encoding(df: pd.DataFrame, encoding_map: dict) -> pd.DataFrame
             df[f'{col}_encoded'] = df[col].map(col_map)
     return df
 
-def split_columns():
-    pass
+def split_columns(df: pd.DataFrame, target_col: str = 'SalePrice', id_col: str = 'Id') -> tuple[list[str], list[str]]:
+    """
+    Splits dataframe columns into numerical and categorical
+    with MSSubClass treated as categorical.
+
+    Parameters:
+    df: pandas DataFrame
+    target_col: str, name of the target column to exclude
+    id_col: str, name of the ID column to exclude
+    Returns:
+    tuple: (numerical_cols, categorical_cols)
+    """
+    numerical_cols = [col for col in df.columns if df.dtypes[col] != 'object']
+    if target_col in numerical_cols:
+        numerical_cols.remove(target_col)
+    if id_col in numerical_cols:
+        numerical_cols.remove(id_col)
+
+    categorical_cols = [col for col in df.columns if df.dtypes[col] == 'object']
+
+    if 'MSSubClass' in numerical_cols:
+        numerical_cols.remove('MSSubClass')
+        categorical_cols.append('MSSubClass')
+
+    return numerical_cols, categorical_cols

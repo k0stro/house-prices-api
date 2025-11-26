@@ -62,7 +62,7 @@ def test_apply_ordinal_target_encoding():
     assert result.loc[1, "HouseStyle_encoded"] == 2
 
 def test_split_columns():
-    df = pd.DataFrame(sample_raw_data)
+    df = pd.DataFrame([sample_raw_data])
 
     numerical_cols, categorical_cols = split_columns(df)
 
