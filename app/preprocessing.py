@@ -51,3 +51,8 @@ def split_columns(df: pd.DataFrame, target_col: str = 'SalePrice', id_col: str =
         categorical_cols.append('MSSubClass')
 
     return numerical_cols, categorical_cols
+
+def cast_categorical(df: pd.DataFrame, categorical_cols: list) -> pd.DataFrame:
+    df = df.copy()
+    df[categorical_cols] = df[categorical_cols].astype('object')
+    return df

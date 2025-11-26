@@ -1,8 +1,12 @@
 import pytest
 import pandas as pd
 import numpy as np
-from app.preprocessing import feature_construction, apply_ordinal_encoding, split_columns
+from app.preprocessing import feature_construction, apply_ordinal_encoding, split_columns, cast_categorical
 from app.schemas import sample_raw_data
+
+@pytest.fixture
+def sample_df():
+    return pd.DataFrame([sample_raw_data])
 
 def test_feature_construction():
     data = {
@@ -61,10 +65,8 @@ def test_apply_ordinal_target_encoding():
     assert result.loc[0, "HouseStyle_encoded"] == 1
     assert result.loc[1, "HouseStyle_encoded"] == 2
 
-def test_split_columns():
-    df = pd.DataFrame([sample_raw_data])
-
-    numerical_cols, categorical_cols = split_columns(df)
+def test_split_columns(sample_df):
+    numerical_cols, categorical_cols = split_columns(sample_df)
 
     expected_numerical_cols = [
         'LotFrontage',
@@ -153,3 +155,55 @@ def test_split_columns():
 
     assert set(numerical_cols) == set(expected_numerical_cols)
     assert set(categorical_cols) == set(expected_categorical_cols)
+
+def test_cast_categorical_changes_dtype(sample_df):
+    categorical_cols = [
+        'MSZoning',
+        'Street',
+        'Alley',
+        'LotShape',
+        'LandContour',
+        'Utilities',
+        'LotConfig',
+        'LandSlope',
+        'Neighborhood',
+        'Condition1',
+        'Condition2',
+        'BldgType',
+        'HouseStyle',
+        'RoofStyle',
+        'RoofMatl',
+        'Exterior1st',
+        'Exterior2nd',
+        'MasVnrType',
+        'ExterQual',
+        'ExterCond',
+        'Foundation',
+        'BsmtQual',
+        'BsmtCond',
+        'BsmtExposure',
+        'BsmtFinType1',
+        'BsmtFinType2',
+        'Heating',
+        'HeatingQC',
+        'CentralAir',
+        'Electrical',
+        'KitchenQual',
+        'Functional',
+        'FireplaceQu',
+        'GarageType',
+        'GarageFinish',
+        'GarageQual',
+        'GarageCond',
+        'PavedDrive',
+        'PoolQC',
+        'Fence',
+        'MiscFeature',
+        'SaleType',
+        'SaleCondition',
+        'MSSubClass'
+        ]
+    result = cast_categorical(sample_df, categorical_cols)
+
+    for col in categorical_cols:
+        assert result[col].dtype == 'object'
