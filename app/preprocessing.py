@@ -25,3 +25,6 @@ def apply_ordinal_encoding(df: pd.DataFrame, encoding_map: dict) -> pd.DataFrame
         if col in df.columns:
             df[f'{col}_encoded'] = df[col].map(col_map)
     return df
+
+def split_columns():
+    pass
