@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Body
-from app.schemas import RawHousePriceInputData, ProcessedHousePriceInputData, HousePriceOutputData, dummy_input
+from app.schemas import RawHousePriceInputData, HousePriceOutputData, dummy_input
 from app.model import predict
 
 app = FastAPI()
