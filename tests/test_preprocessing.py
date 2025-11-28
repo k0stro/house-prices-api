@@ -1,7 +1,9 @@
 import pytest
 import pandas as pd
 import numpy as np
-from app.preprocessing import feature_construction, apply_ordinal_encoding, split_columns, cast_categorical, drop_categorical
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.compose import ColumnTransformer
+from app.preprocessing import feature_construction, apply_ordinal_encoding, split_columns, cast_categorical, drop_categorical, scale_features
 from app.schemas import sample_raw_data
 
 @pytest.fixture
@@ -377,3 +379,38 @@ def test_drop_categorical_keeps_other_columns(sample_df):
     expected_remaining_cols = set(sample_df.columns) - set(categorical_cols)
 
     assert set(result.columns) == expected_remaining_cols
+
+def test_scale_features_applies_scaling():
+    df = pd.DataFrame({
+        'A': [0, 10],
+        'B': [5, 15]
+    })
+
+    scaler = ColumnTransformer(
+        transformers=[('scale', MinMaxScaler(), ['A', 'B'])],
+        remainder='passthrough'
+    )
+
+    scaler.fit(df)
+
+    result = scale_features(df, scaler)
+
+    assert np.all(result['A'] >= 0) and np.all(result['A'] <= 1)
+    assert np.all(result['B'] >= 0) and np.all(result['B'] <= 1)
+
+def test_scale_features_preserves_shape_and_columns():
+    df = pd.DataFrame({
+        'A': [1, 2, 3],
+        'B': [10, 20, 30]
+    })
+
+    scaler = ColumnTransformer(
+        transformers=[('scale', MinMaxScaler(), ['A', 'B'])],
+        remainder='passthrough'
+    )
+    scaler.fit(df)
+
+    result = scale_features(df, scaler)
+
+    assert result.shape == df.shape
+    assert list(result.columns) == list(df.columns)

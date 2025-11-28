@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.compose import ColumnTransformer
 
 def feature_construction(df: pd.DataFrame) -> pd.DataFrame:
     df['Age'] = df['YrSold'] - df['YearBuilt']
@@ -62,3 +63,7 @@ def drop_categorical(df: pd.DataFrame, categorical_cols: list) -> pd.DataFrame:
     df = df.drop(columns=categorical_cols)
     return df
 
+def scale_features(df: pd.DataFrame, scaler: ColumnTransformer) -> pd.DataFrame:
+    scaled_array = scaler.transform(df)
+    scaled_df = pd.DataFrame(scaled_array, columns=df.columns, index=df.index)
+    return scaled_df
