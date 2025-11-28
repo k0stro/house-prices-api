@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from app.preprocessing import feature_construction, apply_ordinal_encoding, split_columns, cast_categorical
+from app.preprocessing import feature_construction, apply_ordinal_encoding, split_columns, cast_categorical, drop_categorical
 from app.schemas import sample_raw_data
 
 @pytest.fixture
@@ -64,6 +64,17 @@ def test_apply_ordinal_target_encoding():
     assert result.loc[3, "Neighborhood_encoded"] == 3
     assert result.loc[0, "HouseStyle_encoded"] == 1
     assert result.loc[1, "HouseStyle_encoded"] == 2
+
+
+def test_apply_ordinal_encoding_handles_missing_columns(sample_df):
+    encoding_map = {
+        "NonExistentColumn": {"A": 1, "B": 2},
+    }
+
+    result = apply_ordinal_encoding(sample_df.copy(), encoding_map)
+
+    assert "NonExistentColumn_encoded" not in result.columns
+
 
 def test_split_columns(sample_df):
     numerical_cols, categorical_cols = split_columns(sample_df)
@@ -260,3 +271,109 @@ def test_cast_categorical_no_side_effects(sample_df):
 
     assert sample_df is not result
     assert sample_df.equals(original_df)
+
+
+def test_drop_categorical_removes_columns(sample_df):
+    categorical_cols = [
+        'MSZoning',
+        'Street',
+        'Alley',
+        'LotShape',
+        'LandContour',
+        'Utilities',
+        'LotConfig',
+        'LandSlope',
+        'Neighborhood',
+        'Condition1',
+        'Condition2',
+        'BldgType',
+        'HouseStyle',
+        'RoofStyle',
+        'RoofMatl',
+        'Exterior1st',
+        'Exterior2nd',
+        'MasVnrType',
+        'ExterQual',
+        'ExterCond',
+        'Foundation',
+        'BsmtQual',
+        'BsmtCond',
+        'BsmtExposure',
+        'BsmtFinType1',
+        'BsmtFinType2',
+        'Heating',
+        'HeatingQC',
+        'CentralAir',
+        'Electrical',
+        'KitchenQual',
+        'Functional',
+        'FireplaceQu',
+        'GarageType',
+        'GarageFinish',
+        'GarageQual',
+        'GarageCond',
+        'PavedDrive',
+        'PoolQC',
+        'Fence',
+        'MiscFeature',
+        'SaleType',
+        'SaleCondition',
+        'MSSubClass'
+        ]
+    result = drop_categorical(sample_df, categorical_cols)
+
+    for col in categorical_cols:
+        assert col not in result.columns
+
+def test_drop_categorical_keeps_other_columns(sample_df):
+    categorical_cols = [
+        'MSZoning',
+        'Street',
+        'Alley',
+        'LotShape',
+        'LandContour',
+        'Utilities',
+        'LotConfig',
+        'LandSlope',
+        'Neighborhood',
+        'Condition1',
+        'Condition2',
+        'BldgType',
+        'HouseStyle',
+        'RoofStyle',
+        'RoofMatl',
+        'Exterior1st',
+        'Exterior2nd',
+        'MasVnrType',
+        'ExterQual',
+        'ExterCond',
+        'Foundation',
+        'BsmtQual',
+        'BsmtCond',
+        'BsmtExposure',
+        'BsmtFinType1',
+        'BsmtFinType2',
+        'Heating',
+        'HeatingQC',
+        'CentralAir',
+        'Electrical',
+        'KitchenQual',
+        'Functional',
+        'FireplaceQu',
+        'GarageType',
+        'GarageFinish',
+        'GarageQual',
+        'GarageCond',
+        'PavedDrive',
+        'PoolQC',
+        'Fence',
+        'MiscFeature',
+        'SaleType',
+        'SaleCondition',
+        'MSSubClass'
+        ]
+    result = drop_categorical(sample_df, categorical_cols)
+
+    expected_remaining_cols = set(sample_df.columns) - set(categorical_cols)
+
+    assert set(result.columns) == expected_remaining_cols

@@ -56,3 +56,9 @@ def cast_categorical(df: pd.DataFrame, categorical_cols: list) -> pd.DataFrame:
     df = df.copy()
     df[categorical_cols] = df[categorical_cols].astype('object')
     return df
+
+def drop_categorical(df: pd.DataFrame, categorical_cols: list) -> pd.DataFrame:
+    df = df.copy()
+    df = df.drop(columns=categorical_cols)
+    return df
+
