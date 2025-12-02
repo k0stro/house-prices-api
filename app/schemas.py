@@ -45,8 +45,8 @@ class RawHousePriceInputData(BaseModel):
     HeatingQC: str
     CentralAir: str
     Electrical: str
-    _1stFlrSF: int
-    _2ndFlrSF: int
+    FirstFlrSF: int = Field(alias='1stFlrSF')
+    SecondFlrSF: int = Field(alias='2ndFlrSF')
     LowQualFinSF: int
     GrLivArea: int
     BsmtFullBath: int
@@ -71,7 +71,7 @@ class RawHousePriceInputData(BaseModel):
     WoodDeckSF: int
     OpenPorchSF: int
     EnclosedPorch: int
-    _3SsnPorch: int
+    ThreeSsnPorch: int = Field(alias='3SsnPorch')
     ScreenPorch: int
     PoolArea: int
     PoolQC: str
@@ -347,3 +347,17 @@ sample_raw_data = {
                 'SaleType': 'WD',
                 'SaleCondition': 'Normal'
                 }
+
+class SampleModel(BaseModel):
+    Neighborhood: str = "A"
+    GarageType: str = "Attchd"
+    TotalBsmtSF: int = 800
+    BsmtUnfSF: int = 200
+    YrSold: int = 2010
+    YearBuilt: int = 2000
+    YearRemodAdd: int = 2005
+    GrLivArea: int = 1500
+    LotArea: int = 7000
+    TotRmsAbvGrd: int = 7
+    FirstFlrSF: int = 800
+    SecondFlrSF: int = 700

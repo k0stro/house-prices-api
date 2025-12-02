@@ -1,8 +1,13 @@
 import pandas as pd
 import numpy as np
 from sklearn.compose import ColumnTransformer
+from pydantic import BaseModel
 
 def feature_construction(df: pd.DataFrame) -> pd.DataFrame:
+    if '1stFlrSF' not in df.columns and 'FirstFlrSF' in df.columns:
+        df['1stFlrSF'] = df['FirstFlrSF']
+    if '2ndFlrSF' not in df.columns and 'SecondFlrSF' in df.columns:
+        df['2ndFlrSF'] = df['SecondFlrSF']
     df['Age'] = df['YrSold'] - df['YearBuilt']
     df['RemodAge'] = df['YrSold'] - df['YearRemodAdd']
     df['HasGarage'] = (df['GarageType'] != 'None').astype(int)
@@ -64,6 +69,17 @@ def drop_categorical(df: pd.DataFrame, categorical_cols: list) -> pd.DataFrame:
     return df
 
 def scale_features(df: pd.DataFrame, scaler: ColumnTransformer) -> pd.DataFrame:
+    df = df.copy()
     scaled_array = scaler.transform(df)
     scaled_df = pd.DataFrame(scaled_array, columns=df.columns, index=df.index)
     return scaled_df
+
+def preprocess_data(raw_data: BaseModel, encoding_map: dict, scaler: ColumnTransformer) -> pd.DataFrame:
+    df = pd.DataFrame([raw_data.model_dump(by_alias=True)])
+    _, categorical_cols = split_columns(df)
+    df = cast_categorical(df, categorical_cols)
+    df_encoded = apply_ordinal_encoding(df, encoding_map)
+    df_encoded = feature_construction(df_encoded)
+    df_encoded = drop_categorical(df_encoded, categorical_cols)
+    df_scaled = scale_features(df_encoded, scaler)
+    return df_scaled
