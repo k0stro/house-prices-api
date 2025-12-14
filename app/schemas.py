@@ -361,3 +361,28 @@ class SampleModel(BaseModel):
     TotRmsAbvGrd: int = 7
     FirstFlrSF: int = 800
     SecondFlrSF: int = 700
+
+TRAIN_COLUMNS = ['LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt',
+       'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF',
+       'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea',
+       'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr',
+       'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt',
+       'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF',
+       'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal',
+       'MoSold', 'YrSold', 'MSZoning_encoded', 'Street_encoded',
+       'Alley_encoded', 'LotShape_encoded', 'LandContour_encoded',
+       'Utilities_encoded', 'LotConfig_encoded', 'LandSlope_encoded',
+       'Neighborhood_encoded', 'Condition1_encoded', 'Condition2_encoded',
+       'BldgType_encoded', 'HouseStyle_encoded', 'RoofStyle_encoded',
+       'RoofMatl_encoded', 'Exterior1st_encoded', 'Exterior2nd_encoded',
+       'MasVnrType_encoded', 'ExterQual_encoded', 'ExterCond_encoded',
+       'Foundation_encoded', 'BsmtQual_encoded', 'BsmtCond_encoded',
+       'BsmtExposure_encoded', 'BsmtFinType1_encoded', 'BsmtFinType2_encoded',
+       'Heating_encoded', 'HeatingQC_encoded', 'CentralAir_encoded',
+       'Electrical_encoded', 'KitchenQual_encoded', 'Functional_encoded',
+       'FireplaceQu_encoded', 'GarageType_encoded', 'GarageFinish_encoded',
+       'GarageQual_encoded', 'GarageCond_encoded', 'PavedDrive_encoded',
+       'PoolQC_encoded', 'Fence_encoded', 'MiscFeature_encoded',
+       'SaleType_encoded', 'SaleCondition_encoded', 'MSSubClass_encoded',
+       'Age', 'RemodAge', 'HasGarage', 'HasBasement', 'UnfBsmtPercent',
+       'LivLotRatio', 'AreaPerRoom']
