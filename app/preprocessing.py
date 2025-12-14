@@ -74,12 +74,13 @@ def scale_features(df: pd.DataFrame, scaler: ColumnTransformer) -> pd.DataFrame:
     scaled_df = pd.DataFrame(scaled_array, columns=df.columns, index=df.index)
     return scaled_df
 
-def preprocess_data(raw_data: BaseModel, encoding_map: dict, scaler: ColumnTransformer) -> pd.DataFrame:
+def preprocess_data(raw_data: BaseModel, encoding_map: dict, scaler: ColumnTransformer, train_columns: list) -> pd.DataFrame:
     df = pd.DataFrame([raw_data.model_dump(by_alias=True)])
     _, categorical_cols = split_columns(df)
     df = cast_categorical(df, categorical_cols)
     df_encoded = apply_ordinal_encoding(df, encoding_map)
     df_encoded = feature_construction(df_encoded)
     df_encoded = drop_categorical(df_encoded, categorical_cols)
+    df_encoded = df_encoded[train_columns]
     df_scaled = scale_features(df_encoded, scaler)
     return df_scaled
